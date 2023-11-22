@@ -42,8 +42,11 @@ def create_layout():
             dcc.Dropdown(
                 id="dropdown-menu",
                 options=dropdown_options,
-                value="sex_distribution",  # Default selected value
-                searchable=False # To prevent keyboard popping up on phones
+                searchable=False, # To prevent keyboard popping up on phones
+                value= None,
+                placeholder="Select a chart to display...",
+                style={'backgroundColor': 'white', 'border': '10px solid white'}
+
 
         ),
 
@@ -59,6 +62,8 @@ def create_layout():
     [Input("dropdown-menu", "value")]
 )
 def update_graph(selected_option):
+    if selected_option is None:
+        return {} # Returns an empty chart instead of callback error
 
     chart_functions = {
         "sex_distribution": charts.create_sex_distribution_piechart,
