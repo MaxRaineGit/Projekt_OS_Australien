@@ -21,7 +21,10 @@ def create_layout():
     ]
 
     return html.Div([
-        html.H1("Olympic Games Analysis"),
+        html.H1(
+            "Olympic Games Analysis",
+            style={"textAlign" : "center", "border" : "2px solid black", "padding" : "10px"}
+        ),
 
         # Dropdown menu
         dcc.Dropdown(
