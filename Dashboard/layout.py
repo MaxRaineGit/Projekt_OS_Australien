@@ -20,8 +20,16 @@ def create_layout():
         {'label': 'Cross Country Skiers Age', 'value': 'cross_country_skiers_age'},
     ]
 
-    return html.Div([
-        html.H1(
+    return html.Div(
+        style={
+            "background-image" : "url('Dashboard/images/Olympic_background.jpg')",
+            "background-size" : "cover",
+            "height" : "100vh",
+            "padding" : "10px"
+        },
+
+        children=[
+            html.H1(
             "Olympic Games Analysis",
             style={"textAlign" : "center", "border" : "2px solid black", "padding" : "10px"}
         ),
@@ -35,7 +43,8 @@ def create_layout():
 
         # Graph container
         dcc.Graph(id="selected-graph"),
-    ])
+        ]
+    )
 
 
 # Callback to update graph based on dropdown selection
