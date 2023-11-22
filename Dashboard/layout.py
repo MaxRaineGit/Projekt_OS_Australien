@@ -22,7 +22,7 @@ def create_layout():
 
     return html.Div(
         style={
-            "background-image": r"url('Dashboard/assets/Olympic_background.jpg')",
+            "background-image": "url('/assets/Olympic_background.jpg')",
             "background-size" : "cover",
             "height" : "100vh",
             "padding" : "10px"
@@ -31,7 +31,11 @@ def create_layout():
         children=[
             html.H1(
                 "Olympic Games Analysis",
-                style={"textAlign" : "center", "border" : "2px solid black", "padding" : "10px"}
+                style={"textAlign" : "center",
+                        "border" : "2px solid black",
+                        "padding" : "10px",
+                        "background-color" : "white"
+                        }
         ),
 
         # Dropdown menu
