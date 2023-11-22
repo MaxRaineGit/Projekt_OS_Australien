@@ -1,33 +1,60 @@
-from dash import html, dcc
+from dash import html, dcc, callback, Output, Input
 import charts  # Import charts module
 
+
 def create_layout():
-    # Call functions
-    sex_distribution_chart = charts.create_sex_distribution_piechart()
-    top_ten_countries_chart = charts.create_top_ten_countries_diagram()
-    age_group_medals_chart = charts.create_age_group_medals_diagram()
-    medals_per_sport_australia_chart = charts.create_medals_per_sport_australia()
-    australian_medals_per_year_chart = charts.create_australian_medals_per_year_diagram()
-    histogram_australia_chart = charts.create_histogram_australia()
-    medals_country_swimming_chart = charts.create_medals_country_swimming()
-    age_distribution_swimming_chart = charts.create_age_distribution_swimming()
-    medal_distribution_per_year_tug_of_war_chart = charts.create_medal_distribution_per_year_tug_of_war()
-    age_distribution_tug_of_war_chart = charts.create_age_distribution_tug_of_war()
-    cross_country_medals_per_country_chart = charts.create_cross_country_medals_per_country_diagram()
-    cross_country_skiers_age_chart = charts.create_cross_country_skiers_age_diagram()
+
+    # Defining dropdown options
+    dropdown_options = [
+        {'label': 'Sex Distribution', 'value': 'sex_distribution'},
+        {'label': 'Top Ten Countries', 'value': 'top_ten_countries'},
+        {'label': 'Age Group Medals', 'value': 'age_group_medals'},
+        {'label': 'Medals per Sport Australia', 'value': 'medals_per_sport_australia'},
+        {'label': 'Australian Medals per Year', 'value': 'australian_medals_per_year'},
+        {'label': 'Histogram Australia', 'value': 'histogram_australia'},
+        {'label': 'Medals Country Swimming', 'value': 'medals_country_swimming'},
+        {'label': 'Age Distribution Swimming', 'value': 'age_distribution_swimming'},
+        {'label': 'Medal Distribution per Year Tug of War', 'value': 'medal_distribution_per_year_tug_of_war'},
+        {'label': 'Age Distribution Tug of War', 'value': 'age_distribution_tug_of_war'},
+        {'label': 'Cross Country Medals per Country', 'value': 'cross_country_medals_per_country'},
+        {'label': 'Cross Country Skiers Age', 'value': 'cross_country_skiers_age'},
+    ]
 
     return html.Div([
         html.H1("Olympic Games Analysis"),
-        dcc.Graph(figure=sex_distribution_chart),
-        dcc.Graph(figure=top_ten_countries_chart),
-        dcc.Graph(figure=age_group_medals_chart),
-        dcc.Graph(figure=medals_per_sport_australia_chart),
-        dcc.Graph(figure=australian_medals_per_year_chart),
-        dcc.Graph(figure=histogram_australia_chart),
-        dcc.Graph(figure=medals_country_swimming_chart),
-        dcc.Graph(figure=age_distribution_swimming_chart),
-        dcc.Graph(figure=medal_distribution_per_year_tug_of_war_chart),
-        dcc.Graph(figure=age_distribution_tug_of_war_chart),
-        dcc.Graph(figure=cross_country_medals_per_country_chart),
-        dcc.Graph(figure=cross_country_skiers_age_chart),
+
+        # Dropdown menu
+        dcc.Dropdown(
+            id="dropdown-menu",
+            options=dropdown_options,
+            value="sex_distribution"  # Default selected value
+        ),
+
+        # Graph container
+        dcc.Graph(id="selected-graph"),
     ])
+
+
+# Callback to update graph based on dropdown selection
+@callback(
+    Output("selected-graph", "figure"),
+    [Input("dropdown-menu", "value")]
+)
+def update_graph(selected_option):
+
+    chart_functions = {
+        "sex_distribution": charts.create_sex_distribution_piechart,
+        "top_ten_countries": charts.create_top_ten_countries_diagram,
+        "age_group_medals": charts.create_age_group_medals_diagram,
+        "medals_per_sport_australia": charts.create_medals_per_sport_australia,
+        "australian_medals_per_year": charts.create_australian_medals_per_year_diagram,
+        "histogram_australia": charts.create_histogram_australia,
+        "medals_country_swimming": charts.create_medals_country_swimming,
+        "age_distribution_swimming": charts.create_age_distribution_swimming,
+        "medal_distribution_per_year_tug_of_war": charts.create_medal_distribution_per_year_tug_of_war,
+        "age_distribution_tug_of_war": charts.create_age_distribution_tug_of_war,
+        "cross_country_medals_per_country": charts.create_cross_country_medals_per_country_diagram,
+        "cross_country_skiers_age": charts.create_cross_country_skiers_age_diagram,
+    }
+
+    return chart_functions[selected_option]()
