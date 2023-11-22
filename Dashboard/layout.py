@@ -44,6 +44,7 @@ def create_layout():
                 options=dropdown_options,
                 value="sex_distribution",  # Default selected value
                 searchable=False # To prevent keyboard popping up on phones
+
         ),
 
         # Graph container
