@@ -27,7 +27,8 @@ def create_layout():
         dcc.Dropdown(
             id="dropdown-menu",
             options=dropdown_options,
-            value="sex_distribution"  # Default selected value
+            value="sex_distribution",  # Default selected value
+            searchable=False # To prevent keyboard popping up on phones
         ),
 
         # Graph container
