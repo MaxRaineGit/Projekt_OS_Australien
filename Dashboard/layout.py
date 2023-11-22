@@ -22,7 +22,7 @@ def create_layout():
 
     return html.Div(
         style={
-            "background-image": "url('/assets/harmonized_background.jpg')",
+            "background-image": "url('/assets/Olympic_background.jpg')",
             "background-size" : "cover",
             "height" : "100vh",
             "padding" : "10px"
