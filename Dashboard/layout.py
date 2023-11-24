@@ -6,18 +6,18 @@ def create_layout():
 
     # Defining dropdown options
     dropdown_options = [
-        {'label': 'Sex Distribution', 'value': 'sex_distribution'},
-        {'label': 'Top Ten Countries', 'value': 'top_ten_countries'},
-        {'label': 'Age Group Medals', 'value': 'age_group_medals'},
-        {'label': 'Medals per Sport Australia', 'value': 'medals_per_sport_australia'},
-        {'label': 'Australian Medals per Year', 'value': 'australian_medals_per_year'},
-        {'label': 'Histogram Australia', 'value': 'histogram_australia'},
-        {'label': 'Medals Country Swimming', 'value': 'medals_country_swimming'},
-        {'label': 'Age Distribution Swimming', 'value': 'age_distribution_swimming'},
-        {'label': 'Medal Distribution per Year Tug of War', 'value': 'medal_distribution_per_year_tug_of_war'},
-        {'label': 'Age Distribution Tug of War', 'value': 'age_distribution_tug_of_war'},
-        {'label': 'Cross Country Medals per Country', 'value': 'cross_country_medals_per_country'},
-        {'label': 'Cross Country Skiers Age', 'value': 'cross_country_skiers_age'},
+        {'label': 'All Olympic Games - Male/Female Athlete Distribution', 'value': 'sex_distribution'},
+        {'label': 'All Olympic Games - Amount of Medals Won (Top 10 Countries)', 'value': 'top_ten_countries'},
+        {'label': 'All Olympic Games - Medals Won per Age Group/Sex', 'value': 'age_group_medals'},
+        {'label': 'Australia - Medals Won per Sport', 'value': 'medals_per_sport_australia'},
+        {'label': 'Australia - Medals Won per Olympic Game', 'value': 'australian_medals_per_year'},
+        {'label': 'Australia - Age of Athletes', 'value': 'histogram_australia'},
+        {'label': 'Swimming - Medals per Country', 'value': 'medals_country_swimming'},
+        {'label': 'Swimming - Age Distribution', 'value': 'age_distribution_swimming'},
+        {'label': 'Tug of War - Medals per Country', 'value': 'medal_distribution_per_year_tug_of_war'},
+        {'label': 'Tug of War - Age Distribution', 'value': 'age_distribution_tug_of_war'},
+        {'label': 'Cross Country Skiing - Medals per Country', 'value': 'cross_country_medals_per_country'},
+        {'label': 'Cross Country Skiing - Age Distribution', 'value': 'cross_country_skiers_age'},
     ]
 
     return html.Div(
@@ -42,8 +42,11 @@ def create_layout():
             dcc.Dropdown(
                 id="dropdown-menu",
                 options=dropdown_options,
-                value="sex_distribution",  # Default selected value
-                searchable=False # To prevent keyboard popping up on phones
+                searchable=False, # To prevent keyboard popping up on phones
+                value= None,
+                placeholder="Select a chart to display...",
+                style={'backgroundColor': 'white', 'border': '10px solid white'}
+
 
         ),
 
@@ -59,6 +62,8 @@ def create_layout():
     [Input("dropdown-menu", "value")]
 )
 def update_graph(selected_option):
+    if selected_option is None:
+        return {} # Returns an empty chart instead of callback error
 
     chart_functions = {
         "sex_distribution": charts.create_sex_distribution_piechart,
