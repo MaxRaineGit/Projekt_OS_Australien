@@ -16,8 +16,16 @@ def create_sex_distribution_piechart():
     )
 
 def create_top_ten_countries_diagram():
+    # Creates a new dataframe grouping that only shows the columns "Team" and "Total Medals"
+    # Value_counts Counts the values for each row
+    # Unstack transforms the groupby into a new dataframe
+    # fillna changes the missing data to having a value of 0 so it wont effect the counting
+    # Sum counts everthing in the first axis which is "Total Medals" after we used reset_index to both reset the index and change the name of the second column.
     country_medals = data_athletes.groupby("NOC")["Medal"].value_counts().unstack().fillna(0).sum(axis=1).reset_index(name="Total Medals")
+
+    # Sorts the dataframe by Total medals and creates a new dataframe with the top 10
     top_ten_countries = country_medals.sort_values(by="Total Medals", ascending=False).head(10)
+    
     return px.bar(
         top_ten_countries,
         x="NOC", y="Total Medals",
@@ -69,17 +77,38 @@ def create_australian_medals_per_year_diagram():
 
 def create_histogram_australia():
     australian_athletes = data_athletes[data_athletes['NOC'].isin(['AUS', 'ANZ'])]
-    return px.histogram(
+    
+    histogram = px.histogram(
         australian_athletes,
         x="Age",
         nbins=25,
         title="Age of Australian Olympic athletes"
     )
 
+    # Creating a gap between each bar so it's easier to look at
+    histogram.update_layout(
+        bargap=0.2
+    )
+
+    return histogram
+
 def create_medals_country_swimming():
     filitered_swimming = data_athletes[data_athletes["Sport"] == "Swimming"]
+    # Creates a series by grouping NOC and medal column together.
+    # .size() counts the values in each group
+    # unstack(fill_value=0) reshapes it into a dataframe again, while also changing the NaN values to 0
+    # reset_index() resets the index again
     medals_swimming = filitered_swimming.groupby(["NOC", "Medal"]).size().unstack(fill_value=0).reset_index()
+
+    # Filtering out the countries who has participated but has not won any medals
     medals_swimming = medals_swimming[medals_swimming[["Gold", "Silver", "Bronze"]].sum(axis=1) > 0]
+
+    # Sorting the countries based on total medals for easier readability
+    medals_swimming["Total Medals"] = medals_swimming[["Gold", "Silver", "Bronze"]].sum(axis=1)
+    medals_swimming = medals_swimming.sort_values(by="Total Medals", ascending=False)
+
+    # Taking the top 20 countries for easier readability
+    medals_swimming = medals_swimming.head(20)
     return px.bar(
         medals_swimming,
         x="NOC",
@@ -91,12 +120,19 @@ def create_medals_country_swimming():
 
 def create_age_distribution_swimming():
     filitered_swimming = data_athletes[data_athletes["Sport"] == "Swimming"]
-    return px.histogram(
+    
+    swimming_histogram = px.histogram(
         filitered_swimming,
         x="Age",
         nbins=10,
         title="Age distribution of swimmers"
     )
+
+    swimming_histogram.update_layout(
+        bargap=0.2
+    )
+
+    return swimming_histogram
 
 def create_medal_distribution_per_year_tug_of_war():
     tug_of_war_data = data_athletes[data_athletes['Sport'] == 'Tug-Of-War']
